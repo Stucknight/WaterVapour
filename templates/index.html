@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><title>Water Vapour</title></head>
+<body>
+<h1>Water Vapour</h1>
+<a href="{{ url_for('upload') }}">Upload a Game</a>
+<ul>
+    {% for game in games %}
+        <li>
+            <a href="{{ url_for('game', game_id=game[0]) }}">{{ game[1] }}</a>
+        </li>
+    {% endfor %}
+</ul>
+</body>
+</html>

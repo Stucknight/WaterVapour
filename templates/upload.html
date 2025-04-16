@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><title>Upload Game</title></head>
+<body>
+<h1>Upload New Game</h1>
+<form method="POST" enctype="multipart/form-data">
+    <label>Game Name:</label><br>
+    <input type="text" name="name" required><br>
+    <label>Description:</label><br>
+    <textarea name="description"></textarea><br>
+    <label>Game File:</label><br>
+    <input type="file" name="file" required><br><br>
+    <button type="submit">Upload</button>
+</form>
+<br><a href="{{ url_for('index') }}">Back to Home</a>
+</body>
+</html>

@@ -3,11 +3,11 @@
 <head><title>Water Vapour</title></head>
 <body>
 <h1>Water Vapour</h1>
-<a href="{{ url_for('upload') }}">Upload a Game</a>
+<a href="{{ url_for('upload') }}">Upload a File</a>
 <ul>
-    {% for game in games %}
+    {% for file in files %}
         <li>
-            <a href="{{ url_for('game', game_id=game[0]) }}">{{ game[1] }}</a>
+            <a href="{{ url_for('file', file_id=file[0]) }}">{{ file[1] }}</a>
         </li>
     {% endfor %}
 </ul>

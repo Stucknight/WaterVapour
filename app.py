@@ -2,14 +2,14 @@ import os
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 
-UPLOAD_FOLDER = 'static/games'
+UPLOAD_FOLDER = 'storage'
 app = Flask(__name__)
 
 def init_db():
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS games (
+        CREATE TABLE IF NOT EXISTS Files (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             description TEXT,
@@ -25,27 +25,27 @@ def index():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     sql = """
-        SELECT * FROM games
+        SELECT * FROM Files
     """
     cursor.execute(sql)
-    games = cursor.fetchall()
+    files = cursor.fetchall()
     cursor.close()
     conn.close()
 
-    return render_template("index.html", games=games)
+    return render_template("index.html", files=files)
 
-@app.route('/game/<game_id>')
-def game(game_id):
+@app.route('/file/<file_id>')
+def file(file_id):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     sql = """
-        SELECT * FROM games WHERE id = ?
+        SELECT * FROM Files WHERE id = ?
     """
-    cursor.execute(sql, (game_id,))
-    game = cursor.fetchone()
+    cursor.execute(sql, (file_id,))
+    file = cursor.fetchone()
     cursor.close()
     conn.close()
-    return render_template("game.html", game=game)
+    return render_template("file.html", file=file)
 
 @app.route('/download/<filename>')
 def download(filename):
@@ -62,7 +62,7 @@ def upload():
             conn = sqlite3.connect('database.db')
             cursor = conn.cursor()
             sql = """
-                INSERT INTO games (name, description, filename) VALUES (?, ?, ?)
+                INSERT INTO Files (name, description, filename) VALUES (?, ?, ?)
             """
             cursor.execute(sql,(name, description, file.filename))
             conn.commit()
@@ -73,4 +73,4 @@ def upload():
 
 init_db()
 if __name__ == '__main__':
-    app.run()
+    app.run('0.0.0.0', port=5000)

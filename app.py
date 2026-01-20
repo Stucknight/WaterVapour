@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import uuid
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 
 UPLOAD_FOLDER = 'storage'
@@ -58,13 +59,15 @@ def upload():
         description = request.form['description']
         file = request.files['file']
         if file:
-            file.save(os.path.join(UPLOAD_FOLDER, file.filename))
+            filename, ext = os.path.splitext(file.filename)
+            filename = f"{uuid.uuid4()}{ext}"
+            file.save(os.path.join(UPLOAD_FOLDER, filename)) 
             conn = sqlite3.connect('database.db')
             cursor = conn.cursor()
             sql = """
                 INSERT INTO Files (name, description, filename) VALUES (?, ?, ?)
             """
-            cursor.execute(sql,(name, description, file.filename))
+            cursor.execute(sql,(name, description, filename))
             conn.commit()
             cursor.close()
             conn.close()
@@ -72,5 +75,3 @@ def upload():
     return render_template("upload.html")
 
 init_db()
-if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000)
